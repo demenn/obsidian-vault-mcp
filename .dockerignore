@@ -1,0 +1,9 @@
+.git
+.env
+data/
+tests/
+docs/
+tools/
+README.md
+README.en.md
+docker-compose.yml

@@ -1,0 +1,11 @@
+# Ruff config for obsidian-vault-mcp.
+# E/F/W/I/B/UP: correctness, imports, common bugs, pyupgrade.
+# E501 off: docstrings deliberately run long in the vendored, battle-tested
+# modules; reformatting them would churn the code for zero value.
+# target py310: keeps `timezone.utc` (the `datetime.UTC` alias is 3.11+), so
+# the code runs on any Python the server supports.
+target-version = "py310"
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]

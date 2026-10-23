@@ -1,0 +1,6 @@
+# >=3.4.6 ships FASTMCP_SSRF_TRUST_PROXY, needed when the server runs behind a
+# TLS-terminating reverse proxy that speaks plain HTTP to the container
+# (see docker-compose.yml).
+fastmcp>=3.4.6,<4
+pyyaml>=6,<7
+youtube-transcript-api>=1.2,<2

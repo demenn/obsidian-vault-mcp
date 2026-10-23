@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "obsidian-vault-mcp"
+version = "1.0.0"
+description = "An MCP server over an Obsidian vault's markdown files: no headless Obsidian, your own OAuth, auditable writes, built-in YouTube transcripts."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    # Mirrors requirements.txt (the pin source for the Docker image).
+    "fastmcp>=3.4.6,<4",
+    "pyyaml>=6,<7",
+    "youtube-transcript-api>=1.2,<2",
+]
+
+[project.scripts]
+vault-mcp = "vault_mcp.server:main"
+
+[tool.setuptools.packages.find]
+include = ["vault_mcp*"]

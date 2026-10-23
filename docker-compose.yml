@@ -1,0 +1,33 @@
+# Example deployment: the server runs next to the vault files, behind your own
+# TLS-terminating reverse proxy (Caddy, Traefik, nginx…). The container itself
+# speaks plain HTTP; OAuth requires a public HTTPS URL (MCP_BASE_URL).
+#
+# Copy to .env next to this file and fill in the values.
+services:
+  vault-mcp:
+    build: .
+    image: vault-mcp:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      VAULT_PATH: /vault
+      VAULT_INBOX_REL: ${VAULT_INBOX_REL:-Inbox}
+      VAULT_EXCLUDE_DIRS: ${VAULT_EXCLUDE_DIRS:-.obsidian,.git,.trash}
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: "8000"
+      MCP_LOG_DIR: /logs
+      # The server sits behind a proxy that rewrites scheme/host: let FastMCP
+      # trust the forwarded headers instead of the socket address.
+      FASTMCP_SSRF_TRUST_PROXY: "true"
+      # Optional: pre-issued machine-account tokens (docs/static-tokens.md).
+      # The DIRECTORY is mounted read-only, never the single file: editors and
+      # `sed -i` replace the file, and a file bind-mount would keep showing the
+      # old inode.
+      MCP_STATIC_TOKENS_FILE: /etc/vault-mcp/static-tokens
+    ports:
+      # Loopback only: reach the server through your reverse proxy, not directly.
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ${HOST_VAULT:-./vault}:/vault
+      - ./data/logs:/logs
+      - ${HOST_MCP_CONF:-./data/conf}:/etc/vault-mcp:ro
